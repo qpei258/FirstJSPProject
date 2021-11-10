@@ -23,6 +23,7 @@
 		<div class="text-center">
 			<h3><%= tagline %></h3>
 			<%
+			response.setIntHeader("Refresh", 1);
 			Date day = new java.util.Date();
 			String am_pm;
 			int hour = day.getHours();
@@ -37,6 +38,9 @@
 			String CT = hour + ":" + minute + ":" + second + " " + am_pm;
 			out.println("현재 접속 시각: " + CT +"\n");
 			%>
+			<form action="products.jsp">
+				<input type="submit" value="상품 목록으로">
+			</form>
 		</div>
 	</div>
 	<%@ include file="footer.jsp" %>
