@@ -19,7 +19,8 @@
 	</div>
 	<%
 		String id = request.getParameter("id");
-		Product product = productDAO.getProductById(id);
+		ProductRepository dao = ProductRepository.getInstance();
+		Product product = dao.getProductById(id);
 	%>
 	<div class="container">
 		<div class="row">
@@ -32,7 +33,7 @@
 				<p> <b>재고 수</b> : <%=product.getUnitsInStock() %>
 				<h4></h4>
 				<p><a href="#" class="btn btn-info"> 상품 주문 &raquo;</a>
-				<a href="./products.jsp" class="btn btn-secondary"> 상품 목록 &raquo;</a>
+
 			</div>
 		</div>
 		<hr>
