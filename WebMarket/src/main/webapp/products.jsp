@@ -1,3 +1,4 @@
+<%@page import="dao.ProductRepository"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.ArrayList" %>
@@ -16,7 +17,8 @@
 		<h1 class="display-3">상품 목록</h1>
 	</div>
 	<%
-		ArrayList<Product> listOfProducts = productDAO.getAllProducts();
+		ProductRepository dao = ProductRepository.getInstance();
+		ArrayList<Product> listOfProducts = dao.getAllProducts();
 	%>
 	<div class="container">
 		<div class="row" align="center"> 
@@ -34,6 +36,11 @@
 				}
 			%>	
 		</div>
+	</div>
+	<div align="center">
+		<form action="addProduct.jsp">
+			<input type="submit" value="상품 추가">
+		</form>
 	</div>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
