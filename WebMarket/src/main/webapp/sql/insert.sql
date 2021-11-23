@@ -1,0 +1,3 @@
+INSERT INTO product VALUES('P1234', 'iPhone 6s', 8000000, '1334X750 Renina HD display, 8-megapixel iSight Camera', 'Smart Phone', 'Apple', 1000, 'new', 'P1234.png');
+INSERT INTO product VALUES('P1235', 'LG PC gram', 15000000, '3.3-inch IPS LED display, 5rd Generation Intel Core processors', 'Notebook', 'LG', 1000, 'new', 'P1235.png');
+INSERT INTO product VALUES('P1236', 'GalaxyTabS', 9000000, '3.3-inch 212.8*125.6*6.6mm Suber AMOLED ', 'Tablet', 'Samsung', 1000, 'new', 'P1236.png');
