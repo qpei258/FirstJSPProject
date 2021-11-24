@@ -1,3 +1,4 @@
+<%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.util.Enumeration"%>
 <%@page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
 <%@page import="com.oreilly.servlet.MultipartRequest"%>
@@ -5,6 +6,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="dto.Product"%>
 <%@ page import="dao.ProductRepository" %>
+<%@ include file="dbconn.jsp" %>
 
 <%
 	request.setCharacterEncoding("utf-8");
@@ -41,21 +43,25 @@
 	String fname = (String) files.nextElement();
 	String fileName = multi.getFilesystemName(fname);
 	
-	ProductRepository dao = ProductRepository.getInstance();
+	PreparedStatement ps = null;
 	
-	Product newProduct = new Product();
-	newProduct.setProductId(productId);
-	newProduct.setPname(name);
-	newProduct.setUnitPrice(price);
-	newProduct.setDescription(description);
-	newProduct.setManufacturer(manufacturer);
-	newProduct.setCategory(category);
-	newProduct.setUnitsInStock(stock);
-	newProduct.setCondition(condition);
-	newProduct.setFilename(fileName);
+	String sql = "insert into product value(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	ps = conn.prepareStatement(sql);
+	ps.setString(1, productId);
+	ps.setString(2, name);
+	ps.setInt(3, price);
+	ps.setString(4, description);
+	ps.setString(5, category);
+	ps.setString(6, manufacturer);
+	ps.setLong(7, stock);
+	ps.setString(8, condition);
+	ps.setString(9, filename);
+	ps.executeUpdate();
 	
-	System.out.println(fileName);
-	dao.addProduct(newProduct);
+	if(ps != null)
+		ps.close();
+	if(conn != null)
+		conn.close();
 	
 	response.sendRedirect("products.jsp");
  %>
