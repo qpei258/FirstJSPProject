@@ -1,16 +1,48 @@
-<%@ page contentType="text/html; charset=utf-8" %>
-	<nav class="navbar navbar-expand navbar-dark bg-dark">
+<%@ page language="java"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.Date" %>
+<!DOCTYPE html>
+<html>
+<head>
+<link rel= "stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>Welcome</title>
+</head>
+<body>
+	<%@ include file="menu.jsp" %>
+	<%! 
+	String greeting = "웹 쇼핑몰에 오신 것을 환영합니다."; 
+	String tagline = "Welcome to Web Market!";
+	%>
+	<div class="jumbotron">
 		<div class="container">
-			<div class="navbar-header">
-				<a class = "navbar-brand" href="./welcome.jsp">Home</a>
-			</div>
-			<div>
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item"><a class="nav-link" href="./products.jsp">상품 목록</a></li>
-					<li class="nav-item"><a class="nav-link" href="./addProduct.jsp">상품 등록</a></li>
-					<li class="nav-item"><a class="nav-link" href="./editProduct.jsp?edit=update">상품 수정</a></li>
-					<li class="nav-item"><a class="nav-link" href="./editProduct.jsp?edit=delete">상품 삭제</a></li>
-				</ul>
-			</div>
+			<h1><%= greeting %></h1>
 		</div>
-	</nav>
+	</div>
+	<div class="container">
+		<div class="text-center">
+			<h3><%= tagline %></h3>
+			<%
+			response.setIntHeader("Refresh", 1);
+			Date day = new java.util.Date();
+			String am_pm;
+			int hour = day.getHours();
+			int minute = day.getMinutes();
+			int second = day.getSeconds();
+			if (hour / 12 == 0){
+				am_pm = "AM";
+			} else {
+				am_pm = "PM";
+				hour = hour - 12;
+			}
+			String CT = hour + ":" + minute + ":" + second + " " + am_pm;
+			out.println("현재 접속 시각: " + CT +"\n");
+			%>
+			<form action="products.jsp">
+				<input type="submit" value="상품 목록으로">
+			</form>
+		</div>
+	</div>
+	<%@ include file="footer.jsp" %>
+</body>
+</html>
