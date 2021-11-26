@@ -1,53 +1,60 @@
 package filter;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.util.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
+public class LogFileFilter implements Filter {
 
-public class LogFileFilter implements Filter{
 	PrintWriter writer;
-	
+
 	public void init(FilterConfig config) throws ServletException {
 		String filename = config.getInitParameter("filename");
-		
-		if(filename == null) throw new ServletException("ë¡œê·¸ íŒŒì¼ì˜ ì´ë¦„ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
-		
+
+		if (filename == null)
+			throw new ServletException("·Î±× ÆÄÀÏÀÇ ÀÌ¸§À» Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+
 		try {
 			writer = new PrintWriter(new FileWriter(filename, true), true);
 		} catch (IOException e) {
-			throw new ServletException("ë¡œê·¸ íŒŒì¼ì„ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+			throw new ServletException("·Î±× ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù.");
 		}
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-		writer.println("ì ‘ì†í•œ í´ë¼ì´ì–¸íŠ¸ IP : " + request.getRemoteAddr());
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws java.io.IOException, ServletException {
+		writer.println(" Á¢¼ÓÇÑ Å¬¶óÀÌ¾ğÆ® IP : " + request.getRemoteAddr());
 		long start = System.currentTimeMillis();
-		writer.println("ì ‘ê·¼í•œ URL ê²½ë¡œ : " + getURLPath(request));
-		writer.println("ìš”ì²­ ì²˜ë¦¬ ì‹œì‘ ì‹œê°„ : " + getCurrentTime());
+		writer.println(" Á¢±ÙÇÑ URL °æ·Î : " + getURLPath(request));
+		writer.println(" ¿äÃ» Ã³¸® ½ÃÀÛ ½Ã°¢ :" + getCurrentTime());
 		
 		chain.doFilter(request, response);
-		
+
 		long end = System.currentTimeMillis();
-		
-		writer.println("ìš”ì²­ ì²˜ë¦¬ ì¢…ë£Œ ì‹œê° : " + getCurrentTime());
-		writer.println("ìš”ì²­ ì²˜ë¦¬ ì†Œìš” ì‹œê°„ : " + (end - start) + " ms ");
-		writer.println("==========================================================");
+		writer.println(" ¿äÃ» Ã³¸® Á¾·á ½Ã°¢ : " + getCurrentTime());
+		writer.println(" ¿äÃ» Ã³¸® ¼Ò¿ä ½Ã°£ : " + (end - start) + "ms ");
+		writer.println("=======================================================");
 	}
-	
+
 	public void destroy() {
-		
+		writer.close();
+	}
+
+	private String getURLPath(ServletRequest request) {
+		HttpServletRequest req;
+		String currentPath = "";
+		String queryString = "";
+		if (request instanceof HttpServletRequest) {
+			req = (HttpServletRequest) request;
+			currentPath = req.getRequestURI();
+			queryString = req.getQueryString();
+			queryString = queryString == null ? "" : "?" + queryString;
+		}
+		return currentPath + queryString;
 	}
 
 	private String getCurrentTime() {
@@ -56,19 +63,4 @@ public class LogFileFilter implements Filter{
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		return formatter.format(calendar.getTime());
 	}
-
-	private String getURLPath(ServletRequest request) {
-		HttpServletRequest req;
-		String currentPath="";
-		String queryString = "";
-		
-		if(request instanceof HttpServletRequest) {
-			req = (HttpServletRequest) request;
-			currentPath = req.getRequestURI();
-			queryString= req.getQueryString();
-			queryString = queryString == null ? "" : "?" + queryString;
-		}
-		return currentPath + queryString;
-	}
-
 }

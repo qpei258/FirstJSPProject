@@ -1,62 +1,51 @@
 package filter;
 
-import java.io.IOException;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.util.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-
-public class LogFilter implements Filter {
+public class LogFilter implements Filter  {
 	
-	public void init(FilterConfig config) throws ServletException {
-		System.out.println("WebMarket ì´ˆê¸°í™”...");
+	public void  init(FilterConfig config) throws ServletException{
+		System.out.println("WebMarket ÃÊ±âÈ­...."); 
 	}
 	
-	public void doFilter(ServletRequest requset, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-		System.out.println("ì ‘ì†í•œ í´ë¼ì´ì–¸íŠ¸ IP : " + requset.getRemoteAddr());
+	public void  doFilter(ServletRequest request,ServletResponse response,FilterChain chain) throws java.io.IOException, ServletException {
+		System.out.println(" Á¢¼ÓÇÑ Å¬¶óÀÌ¾ğÆ® IP : " + request.getRemoteAddr());
 		long start = System.currentTimeMillis();
-		System.out.println("ì ‘ê·¼í•œ URL ê²½ë¡œ :" + getURLPath(requset));
-		System.out.println("ìš”ì²­ ì²˜ë¦¬ ì‹œì‘ ì‹œê° : " + getCurrentTIme());
-		chain.doFilter(requset, response);
+        System.out.println(" Á¢±ÙÇÑ URL °æ·Î : " + getURLPath(request));
+		System.out.println(" ¿äÃ» Ã³¸® ½ÃÀÛ ½Ã°¢ : " + getCurrentTime());
+		chain.doFilter(request,response);		
 		
-		long end = System.currentTimeMillis();
-		System.out.println("ìš”ì²­ ì²˜ë¦¬ ì¢…ë£Œ ì‹œê° : " + getCurrentTIme());
-		System.out.println("ìš”ì²­ ì²˜ë¦¬ ì†Œìš” ì‹œê°„: " + (end-start) + "ms ");
-		System.out.println("============================================");
+		long end = System.currentTimeMillis();		
+		System.out.println(" ¿äÃ» Ã³¸® Á¾·á ½Ã°¢ : " + getCurrentTime());
+		System.out.println(" ¿äÃ» Ã³¸® ¼Ò¿ä ½Ã°£ : " + (end-start)+ "ms ");
+		System.out.println("=======================================================");
 	}
 
-	public void destroy() {
-		
+	public void destroy( ){
+      
+	}
+
+	private String getURLPath(ServletRequest request) {
+		HttpServletRequest req;
+		String currentPath="";
+		String queryString=""; 
+		if(request instanceof HttpServletRequest){
+			req = (HttpServletRequest)request;
+			currentPath = req.getRequestURI();
+			queryString = req.getQueryString();
+			queryString = queryString == null ? "" : "?" + queryString;
+		}
+		return currentPath+queryString;
 	}
 	
-	private String getCurrentTIme() {
+	private String getCurrentTime() {
 		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		return formatter.format(calendar.getTime());
 	}
-
-	private String getURLPath(ServletRequest requset) {
-		HttpServletRequest req;
-		String currentPath="";
-		String queryString="";
-		
-		if(requset instanceof HttpServletRequest) {
-			req = (HttpServletRequest)requset;
-			currentPath = req.getRequestURI();
-			queryString = req.getQueryString();
-			queryString = queryString == null ? " " : "?" + queryString;
-		}
-		return currentPath+queryString;
-	}
-
 }

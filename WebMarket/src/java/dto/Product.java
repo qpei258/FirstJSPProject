@@ -1,26 +1,26 @@
 package dto;
+
 import java.io.Serializable;
 
-
 public class Product implements Serializable {
-	
+
 	private static final long serialVersionUID = -4274700572038677000L;
-		
-	private String productId;		//상품 아이디
-	private String pname;			//상품 이름
-	private Integer unitPrice;		//상품 가격
-	private String description;		//상품 설명
-	private String manufacturer;	//제조사
-	private String category;		//분류
-	private long unitsInStock;		//재고 수
-	private String condition;		//신상 or 중고 or 재생품
+
+	private String productId;
+	private String pname;
+	private Integer unitPrice;
+	private String description;
+	private String manufacturer;
+	private String category;
+	private long unitsInStock;
+	private String condition;
 	private String filename;
 	private int quantity;
-	
+
 	public Product() {
 		super();
 	}
-	
+
 	public Product(String productId, String pname, Integer unitPrice) {
 		this.productId = productId;
 		this.pname = pname;
@@ -31,16 +31,16 @@ public class Product implements Serializable {
 		return productId;
 	}
 
-	public void setProductId(String productId) {
-		this.productId = productId;
-	}
-
 	public String getPname() {
 		return pname;
 	}
 
 	public void setPname(String pname) {
 		this.pname = pname;
+	}
+
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
 
 	public Integer getUnitPrice() {
@@ -90,10 +90,6 @@ public class Product implements Serializable {
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 	
 	public String getFilename() {
 		return filename;
@@ -102,7 +98,7 @@ public class Product implements Serializable {
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-
+	
 	public int getQuantity() {
 		return quantity;
 	}
@@ -110,7 +106,4 @@ public class Product implements Serializable {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-
-	
-	
 }
