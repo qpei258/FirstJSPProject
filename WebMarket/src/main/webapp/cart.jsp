@@ -1,20 +1,17 @@
-<%@page import="java.sql.Array"%>
-<%@page import="dto.Product"%>
-<%@page import="java.util.ArrayList"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+﻿<%@ page contentType="text/html; charset=utf-8"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="dto.Product"%>
+<%@ page import="dao.ProductRepository"%>
 <html>
 <head>
-<link rel= "stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="./resources/css/bootstrap.min.css" />
 <%
 	String cartId = session.getId();
 %>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<title>장바구니</title>
 </head>
 <body>
-	<jsp:include page="menu.jsp"/>
+	<jsp:include page="menu.jsp" />
 	<div class="jumbotron">
 		<div class="container">
 			<h1 class="display-3">장바구니</h1>
@@ -25,7 +22,7 @@
 			<table width="100%">
 				<tr>
 					<td align="left"><a href="./deleteCart.jsp?cartId=<%=cartId%>" class="btn btn-danger">삭제하기</a></td>
-					<td align="right"><a href="./shippingInfo.jsp?cartId=<%=cartId %>" class="btn btn-success">주문하기</a></td>
+					<td align="right"><a href="./shippingInfo.jsp?cartId=<%= cartId %>" class="btn btn-success">주문하기</a></td>
 				</tr>
 			</table>
 		</div>
@@ -36,26 +33,25 @@
 					<th>가격</th>
 					<th>수량</th>
 					<th>소계</th>
-					<th>비교</th>
+					<th>비고</th>
 				</tr>
-				<%
+				<%				
 					int sum = 0;
 					ArrayList<Product> cartList = (ArrayList<Product>) session.getAttribute("cartlist");
-					if(cartList == null)
+					if (cartList == null)
 						cartList = new ArrayList<Product>();
-					
-					for(int i = 0; i < cartList.size(); i++) {
+
+					for (int i = 0; i < cartList.size(); i++) { // 상품리스트 하나씩 출력하기
 						Product product = cartList.get(i);
 						int total = product.getUnitPrice() * product.getQuantity();
 						sum = sum + total;
-					
 				%>
 				<tr>
-					<td><%=product.getProductId() %> - <%=product.getPname() %></td>
-					<th><%=product.getUnitPrice() %></th>
-					<th><%=product.getQuantity() %></th>
-					<th><%=total %></th>
-					<th><a href="./removeCart.jsp?id=<%=product.getProductId() %>" class="badge badge-danger">삭제</a></th>
+					<td><%=product.getProductId()%> - <%=product.getPname()%></td>
+					<td><%=product.getUnitPrice()%></td>
+					<td><%=product.getQuantity()%></td>
+					<td><%=total%></td>
+					<td><a href="./removeCart.jsp?id=<%=product.getProductId()%>" class="badge badge-danger">삭제</a></td>
 				</tr>
 				<%
 					}
@@ -68,10 +64,10 @@
 					<th></th>
 				</tr>
 			</table>
-			<a href="./product.jsp" class="btn btn-secondary">&laquo; 쇼핑 계속하기</a>
+			<a href="./products.jsp" class="btn btn-secondary"> &laquo; 쇼핑 계속하기</a>
 		</div>
 		<hr>
 	</div>
-	<jsp:include page="footer.jsp"/>
+	<jsp:include page="footer.jsp" />
 </body>
 </html>

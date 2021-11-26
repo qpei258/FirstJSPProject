@@ -1,21 +1,17 @@
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.util.Enumeration"%>
-<%@page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
-<%@page import="com.oreilly.servlet.MultipartRequest"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="dto.Product"%>
-<%@ page import="dao.ProductRepository" %>
+<%@ page contentType="text/html; charset=utf-8"%>
+<%@ page import="com.oreilly.servlet.*"%>
+<%@ page import="com.oreilly.servlet.multipart.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.sql.*"%>
 <%@ include file="dbconn.jsp" %>
-
 <%
-	request.setCharacterEncoding("utf-8");
-	
+	request.setCharacterEncoding("UTF-8");
+
 	String filename = "";
-	String realFolder = "C:\\Users\\user\\Documents\\수강계획\\ITBank\\JSP\\WorkSpace\\WebMarket\\src\\main\\webapp\\images";
-	int maxSize = 5 * 1024 * 1024;
-	String encType = "utf-8";
-	
+	String realFolder = "C:\\upload"; //웹 어플리케이션상의 절대 경로
+	String encType = "utf-8"; //인코딩 타입
+	int maxSize = 5 * 1024 * 1024; //최대 업로드될 파일의 크기5Mb
+
 	MultipartRequest multi = new MultipartRequest(request, realFolder, maxSize, encType, new DefaultFileRenamePolicy());
 
 	String productId = multi.getParameter("productId");
@@ -26,15 +22,17 @@
 	String category = multi.getParameter("category");
 	String unitsInStock = multi.getParameter("unitsInStock");
 	String condition = multi.getParameter("condition");
-	
+
 	Integer price;
+
 	if (unitPrice.isEmpty())
 		price = 0;
 	else
 		price = Integer.valueOf(unitPrice);
-	
+
 	long stock;
-	if (unitsInStock.isEmpty()) 
+
+	if (unitsInStock.isEmpty())
 		stock = 0;
 	else
 		stock = Long.valueOf(unitsInStock);
@@ -43,25 +41,27 @@
 	String fname = (String) files.nextElement();
 	String fileName = multi.getFilesystemName(fname);
 	
-	PreparedStatement ps = null;
+	PreparedStatement pstmt = null;	
 	
-	String sql = "insert into product value(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	ps = conn.prepareStatement(sql);
-	ps.setString(1, productId);
-	ps.setString(2, name);
-	ps.setInt(3, price);
-	ps.setString(4, description);
-	ps.setString(5, category);
-	ps.setString(6, manufacturer);
-	ps.setLong(7, stock);
-	ps.setString(8, condition);
-	ps.setString(9, filename);
-	ps.executeUpdate();
+	String sql = "insert into product values(?,?,?,?,?,?,?,?,?)";
+	pstmt = conn.prepareStatement(sql);
+	pstmt.setString(1, productId);
+	pstmt.setString(2, name);
+	pstmt.setInt(3, price);
+	pstmt.setString(4, description);
+	pstmt.setString(5, category);
+	pstmt.setString(6, manufacturer);
+	pstmt.setLong(7, stock);
+	pstmt.setString(8, condition);
+	pstmt.setString(9, fileName);
+	pstmt.executeUpdate();
 	
-	if(ps != null)
-		ps.close();
-	if(conn != null)
+	if (pstmt != null)
+		pstmt.close();
+	if (conn != null)
 		conn.close();
 	
 	response.sendRedirect("products.jsp");
- %>
+	
+%>
+	
